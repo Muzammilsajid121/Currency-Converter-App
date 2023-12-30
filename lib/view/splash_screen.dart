@@ -18,11 +18,12 @@ class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixi
     vsync: this)..repeat();
 
     //need to dispose this
-    @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
+@override
+void dispose() {
+  _controller.dispose(); // Dispose of the AnimationController
+  super.dispose();
+}
+
   //
 
 
