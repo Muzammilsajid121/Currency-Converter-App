@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^6.1.0
   http: ^1.1.0
   flutter_spinkit: ^5.2.0
+  intl: ^0.19.0 #for date time
 
 dev_dependencies:
   flutter_test:
