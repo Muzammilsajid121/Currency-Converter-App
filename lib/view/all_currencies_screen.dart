@@ -2,6 +2,7 @@ import 'package:currency_converter/Models/currency_model.dart';
 import 'package:currency_converter/services/currency_api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 
 class AllCurrencyScreen extends StatefulWidget {
   const AllCurrencyScreen({super.key});
@@ -15,6 +16,17 @@ class _AllCurrencyScreenState extends State<AllCurrencyScreen> {
   CurrencyApiServices currencyApiServices = CurrencyApiServices();
   TextEditingController searchController = TextEditingController();
   
+String _formatApiDate(String apiDate) {
+  try {
+    final parsedDate = DateFormat('E, d MMM y H:m:s Z').parse(apiDate);
+    return "Last Update: ${DateFormat.yMMMd().add_jm().format(parsedDate)}";
+  } catch (e) {
+    print("Error parsing date: $e");
+    return "Last Update: N/A";
+  }
+}
+
+
   @override
   Widget build(BuildContext context) {
     final height= MediaQuery.sizeOf(context).height*1;
@@ -32,7 +44,8 @@ class _AllCurrencyScreenState extends State<AllCurrencyScreen> {
           children: [
            
             TextFormField(
-              controller: SearchController(),
+              controller: searchController,
+              style: Theme.of(context).textTheme.bodyMedium, //input text decor
                //For search
               onChanged: (value) {
                 setState(() {
@@ -43,6 +56,7 @@ class _AllCurrencyScreenState extends State<AllCurrencyScreen> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30)
                 ),
+                
                 fillColor: const Color(0xff212436),
                 hintText: "Type Your Currency",
                 hintStyle: Theme.of(context).textTheme.bodyMedium
@@ -56,14 +70,7 @@ class _AllCurrencyScreenState extends State<AllCurrencyScreen> {
              Text("USD", style: Theme.of(context).textTheme.titleLarge,),
              SizedBox(height: height*0.01,),
            //
-           Container(
-            // width: width*0.10,
-            decoration:const  BoxDecoration(
-              color: Color(0xff2F2F34),
-              borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
-            child:  Text("Date", style: Theme.of(context).textTheme.bodyMedium,),
-           ),
+       
            //
            //API
            FutureBuilder<CurrencyModel>(
@@ -75,59 +82,104 @@ class _AllCurrencyScreenState extends State<AllCurrencyScreen> {
               else{
                Rates rates = snapshot.data!.rates!; // Use the null assertion operator (!)
                List<String> currencies = rates.toJson().keys.toList(); // Assuming you want keys from the toJson representation
+               //
+                // Move the Container with "Last Update" text inside the builder function
+      return Expanded(
+        child: Column(
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                color: Color(0xff2F2F34),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Text(
+                " ${_formatApiDate(snapshot.data!.timeLastUpdateUtc?? 'N/A')}",
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+        
+        
+                 //
+        
+                     Expanded(
+                  child: ListView.builder(
+                  itemCount: currencies.length,
+                  itemBuilder: (context, index){
+        
+                    //Search currency Name
+                    if(searchController.text.isEmpty){
+                        String currencyKey = currencies[index];
+          double rateValue = rates.toJson()[currencyKey];
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                     
+                        child:Column(
+                          children: [
+                      
+               InkWell(
+                onTap: () {
+                  openModelBottomSheet(context);
+                },
 
-                 return  Expanded(
-                child: ListView.builder(
-                itemCount: currencies.length,
-                itemBuilder: (context, index){
-                  //
-                  //Search currency Name
-                  // if(searchController.text.isEmpty){
-                    
-
-                  // }
-                  // else if(currencies.toLowerCase().contains(searchController.text.toLowerCase())){
-
-                  // }else{
-                  //   return Container();
-                  // }
-                    String currencyKey = currencies[index];
-        double rateValue = rates.toJson()[currencyKey];
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                   
-                      child:Column(
-                        children: [
-                      //       ListTile(
-                        
-                      // leading: Image.asset('assets/coin.png'),
-                      // title:  Text(snapshot.data!['currencies']['index'], style: Theme.of(context).textTheme.bodyMedium,),
-                      // trailing:  Text(snapshot.data!['rates'], style: Theme.of(context).textTheme.bodyMedium,),
-                      //               ),
-                          ListTile(
+                   child: ListTile(
                   leading: Image.asset('assets/coin.png'),
                   title: Text(currencyKey, style: Theme.of(context).textTheme.bodyMedium,),
-                trailing: Text(rateValue.toString(), style: Theme.of(context).textTheme.bodyMedium,),
-                       ),
-
-                        SizedBox(height: width*0.01,),
-                      const   Divider(
-                          color: Colors.white,
-                          height: 0.5,
+                  trailing: Text(rateValue.toString(), style: Theme.of(context).textTheme.bodyMedium,),
+                                                       ),
+                            ),
+        
+                          SizedBox(height: width*0.01,),
+                        const   Divider(
+                            color: Colors.white,
+                            height: 0.5,
+                          )
+                          ],
                         )
-                
-                        ],
-                      )
+                    );
+                    }
+                    //currencies[index] becuz currencies is List
+                    else if(currencies[index].toLowerCase().contains(searchController.text.toLowerCase())){
+                          String currencyKey = currencies[index];
+                          double rateValue = rates.toJson()[currencyKey];
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
                      
+                        child:Column(
+                          children: [
+                      
+                            ListTile(
+                    leading: Image.asset('assets/coin.png'),
+                    title: Text(currencyKey, style: Theme.of(context).textTheme.bodyMedium,),
+                  trailing: Text(rateValue.toString(), style: Theme.of(context).textTheme.bodyMedium,),
+                         ),
+        
+                          SizedBox(height: width*0.01,),
+                        const   Divider(
+                            color: Colors.white,
+                            height: 0.5,
+                          )
+                  
+                          ],
+                        )
                        
-                                    
-                    // ),
-                  );
-                  
-                  
-                             
-                }),
-              );
+                         
+                                      
+                      // ),
+                    );
+                    }
+                    else{
+                      return Container();
+                    }
+        
+        
+                    
+                    
+                               
+                  }),
+          )
+          ]  
+          ),
+      );
 
               }
              
@@ -139,4 +191,47 @@ class _AllCurrencyScreenState extends State<AllCurrencyScreen> {
       ),
     );
   }
+}
+
+
+void openModelBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Container(
+              width: double.infinity,
+              height: 200,
+              decoration: BoxDecoration(
+                color: Colors.red,
+              ),
+             
+              child: Column(
+                children: [
+
+               //1st Field 
+                TextFormField(
+              // controller: searchController,
+              style: Theme.of(context).textTheme.bodyMedium, //input text decor
+             
+              // onChanged: (value) {
+              //   setState(() {
+              //   });
+              // },
+              //
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30)
+                ),
+                
+                fillColor: const Color(0xff212436),
+                hintText: "Type Your Currency",
+                hintStyle: Theme.of(context).textTheme.bodyMedium
+                
+              ),
+            ),
+                ],
+              )
+            );
+    },
+  );
 }
