@@ -1,4 +1,5 @@
 
+import 'package:currency_converter/view/all_currencies_screen.dart';
 import 'package:currency_converter/view/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
 
         //
       ),
-      home: const SplashScreen(),
+      home: const AllCurrencyScreen(),
     );
   }
 }
