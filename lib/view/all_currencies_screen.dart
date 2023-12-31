@@ -195,40 +195,122 @@ String _formatApiDate(String apiDate) {
 
 
 void openModelBottomSheet(BuildContext context) {
+  final height= MediaQuery.sizeOf(context).height*1;
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
       return Container(
               width: double.infinity,
-              height: 200,
+              height: height*0.400,
               decoration: BoxDecoration(
-                color: Colors.red,
+                color: Color(0xff1A1B27),
+                borderRadius: BorderRadius.circular(15)
               ),
              
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-
-               //1st Field 
-                TextFormField(
-              // controller: searchController,
-              style: Theme.of(context).textTheme.bodyMedium, //input text decor
-             
-              // onChanged: (value) {
-              //   setState(() {
-              //   });
-              // },
-              //
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30)
+            Image.asset('assets/coincon.png'),
+             //
+             Padding(
+               padding: const EdgeInsets.all(20.0),
+               child: Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xff212436),
+                  borderRadius: BorderRadius.circular(16)
                 ),
-                
-                fillColor: const Color(0xff212436),
-                hintText: "Type Your Currency",
-                hintStyle: Theme.of(context).textTheme.bodyMedium
-                
-              ),
-            ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                                 //!ST FIELD
+                       SizedBox(
+                        width: 120,
+                         child: TextFormField(
+                                       // controller: searchController,
+                                       keyboardType: TextInputType.number,
+                                       style: Theme.of(context).textTheme.bodyMedium, //input text decor
+                                      
+                                       // onChanged: (value) {
+                                       //   setState(() {
+                                       //   });
+                                       // },
+                                       //
+                                       decoration: InputDecoration(
+                                         border: OutlineInputBorder(
+                                           borderRadius: BorderRadius.circular(30)
+                                         ),
+                                         
+                                         fillColor: const Color(0xff212436),
+                                         hintText: "Converter",
+                                         hintStyle: Theme.of(context).textTheme.bodyMedium
+                                         
+                                       ),
+                                     ),
+                       ),
+                             //
+                                 Text('USD', style: Theme.of(context).textTheme.bodyMedium,),
+                                 
+                    ],
+                   ),
+                ),
+               ),
+             ),
+
+               //2nd ROW 
+               ////
+                Padding(
+               padding: const EdgeInsets.all(20.0),
+               child: Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xff212436),
+                  borderRadius: BorderRadius.circular(16)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                                 //!ST FIELD
+                       SizedBox(
+                        width: 120,
+                         child: TextFormField(
+                                keyboardType: TextInputType.number,
+                                       // controller: searchController,
+                                       style: Theme.of(context).textTheme.bodyMedium, //input text decor
+                                      
+                                       // onChanged: (value) {
+                                       //   setState(() {
+                                       //   });
+                                       // },
+                                       //
+                                       decoration: InputDecoration(
+                                         border: OutlineInputBorder(
+                                           borderRadius: BorderRadius.circular(30)
+                                         ),
+                                         
+                                         fillColor: const Color(0xff212436),
+                                         hintText: "Converter",
+                                         hintStyle: Theme.of(context).textTheme.bodyMedium
+                                         
+                                       ),
+                                     ),
+                       ),
+                             //
+                                 Text('USD', style: Theme.of(context).textTheme.bodyMedium,),
+                                 
+                    ],
+                   ),
+                ),
+               ),
+             ),
+              //
                 ],
               )
             );
