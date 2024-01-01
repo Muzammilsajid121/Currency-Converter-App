@@ -1,5 +1,6 @@
 import 'package:currency_converter/Models/currency_model.dart';
 import 'package:currency_converter/services/currency_api_services.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
@@ -15,13 +16,19 @@ class _AllCurrencyScreenState extends State<AllCurrencyScreen> {
   //
   CurrencyApiServices currencyApiServices = CurrencyApiServices();
   TextEditingController searchController = TextEditingController();
+
+  //
+  
+  //
   
 String _formatApiDate(String apiDate) {
   try {
     final parsedDate = DateFormat('E, d MMM y H:m:s Z').parse(apiDate);
     return "Last Update: ${DateFormat.yMMMd().add_jm().format(parsedDate)}";
   } catch (e) {
-    print("Error parsing date: $e");
+    if (kDebugMode) {
+      print("Error parsing date: $e");
+    }
     return "Last Update: N/A";
   }
 }
@@ -80,10 +87,10 @@ String _formatApiDate(String apiDate) {
              return const SpinKitChasingDots(color: Colors.red);
     }
               else{
-               Rates rates = snapshot.data!.rates!; // Use the null assertion operator (!)
-               List<String> currencies = rates.toJson().keys.toList(); // Assuming you want keys from the toJson representation
+               Rates rates = snapshot.data!.rates!; 
+               List<String> currencies = rates.toJson().keys.toList(); 
                //
-                // Move the Container with "Last Update" text inside the builder function
+               
       return Expanded(
         child: Column(
           children: [
@@ -118,12 +125,15 @@ String _formatApiDate(String apiDate) {
                       
                InkWell(
                 onTap: () {
-                  openModelBottomSheet(context);
+                  openModelBottomSheet(
+                    context,    currencyKey,   rateValue, 
+                     (BuildContext context, double calculatedValue) { },
+      ); //context for modal bottom sheet and currencykey to show value on second row
                 },
 
                    child: ListTile(
                   leading: Image.asset('assets/coin.png'),
-                  title: Text(currencyKey, style: Theme.of(context).textTheme.bodyMedium,),
+                  title: Text( currencyKey.toString(), style: Theme.of(context).textTheme.bodyMedium,),
                   trailing: Text(rateValue.toString(), style: Theme.of(context).textTheme.bodyMedium,),
                                                        ),
                             ),
@@ -194,8 +204,16 @@ String _formatApiDate(String apiDate) {
 }
 
 
-void openModelBottomSheet(BuildContext context) {
+
+
+void openModelBottomSheet(
+  BuildContext context , String selectedCurrency ,
+   double selectedratevalue,
+   Function(BuildContext, double) updateState, ) {
+    
   final height= MediaQuery.sizeOf(context).height*1;
+  TextEditingController rateController = TextEditingController();
+   double calculatedValue = 0;
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
@@ -231,15 +249,18 @@ void openModelBottomSheet(BuildContext context) {
                        SizedBox(
                         width: 120,
                          child: TextFormField(
-                                       // controller: searchController,
+                                       controller: rateController,
                                        keyboardType: TextInputType.number,
                                        style: Theme.of(context).textTheme.bodyMedium, //input text decor
                                       
-                                       // onChanged: (value) {
-                                       //   setState(() {
-                                       //   });
-                                       // },
-                                       //
+                                      
+                            // Calculate and update the value dynamically
+                            onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              calculatedValue = double.parse(value) * selectedratevalue;
+                              updateState(context, calculatedValue); // Pass the context and calculatedValue to updateState
+                            }},
+                          
                                        decoration: InputDecoration(
                                          border: OutlineInputBorder(
                                            borderRadius: BorderRadius.circular(30)
@@ -278,32 +299,14 @@ void openModelBottomSheet(BuildContext context) {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                                  //!ST FIELD
-                       SizedBox(
-                        width: 120,
-                         child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                       // controller: searchController,
-                                       style: Theme.of(context).textTheme.bodyMedium, //input text decor
-                                      
-                                       // onChanged: (value) {
-                                       //   setState(() {
-                                       //   });
-                                       // },
-                                       //
-                                       decoration: InputDecoration(
-                                         border: OutlineInputBorder(
-                                           borderRadius: BorderRadius.circular(30)
-                                         ),
-                                         
-                                         fillColor: const Color(0xff212436),
-                                         hintText: "Converter",
-                                         hintStyle: Theme.of(context).textTheme.bodyMedium
-                                         
-                                       ),
-                                     ),
-                       ),
+                     Text(selectedCurrency.toString(), style: Theme.of(context).textTheme.bodyMedium,),
+                       //show the selected currency rate
                              //
-                                 Text('USD', style: Theme.of(context).textTheme.bodyMedium,),
+                           
+                    Text(selectedratevalue.toString(), style: Theme.of(context).textTheme.bodyMedium,),
+                       //show the selected currency name
+                              
+                      
                                  
                     ],
                    ),
