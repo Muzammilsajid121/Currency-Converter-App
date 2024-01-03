@@ -5,21 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
-class AllCurrencyScreen extends StatefulWidget {
-  const AllCurrencyScreen({super.key});
+class AllCurrencyScreen2 extends StatefulWidget {
+  const AllCurrencyScreen2({super.key});
 
   @override
-  State<AllCurrencyScreen> createState() => _AllCurrencyScreenState();
+  State<AllCurrencyScreen2> createState() => _AllCurrencyScreenState();
 }
 
-class _AllCurrencyScreenState extends State<AllCurrencyScreen> {
+class _AllCurrencyScreenState extends State<AllCurrencyScreen2> {
   //
   CurrencyApiServices currencyApiServices = CurrencyApiServices();
   TextEditingController searchController = TextEditingController();
+
   //
-  double lastConvertedCurrency = 0.0;
-
-
+  
+  //
   
 String _formatApiDate(String apiDate) {
   try {
@@ -115,7 +115,7 @@ String _formatApiDate(String apiDate) {
         
                     //Search currency Name
                     if(searchController.text.isEmpty){
-           String currencyKey = currencies[index];
+                        String currencyKey = currencies[index];
           double rateValue = rates.toJson()[currencyKey];
                     return Padding(
                       padding: const EdgeInsets.only(top: 10.0),
@@ -125,15 +125,9 @@ String _formatApiDate(String apiDate) {
                       
                InkWell(
                 onTap: () {
-                  //calling openModelBottomSheet func
                   openModelBottomSheet(
-                    context,    currencyKey,   rateValue,
-                     lastConvertedCurrency, 
-                    //  (BuildContext context, double calculatedValue) {
-                    //   //  setState(() {
-                    //   //  lastConvertedCurrency = calculatedValue;
-                    //   //  });
-                    //   },
+                    context,    currencyKey,   rateValue, 
+                     (BuildContext context, double calculatedValue) { },
       ); //context for modal bottom sheet and currencykey to show value on second row
                 },
 
@@ -209,38 +203,23 @@ String _formatApiDate(String apiDate) {
   }
 }
 
-// void convertedCurrnecy(TextEditingController rateController,
-//   double selectedratevalue,
-//   Function(BuildContext, double)context, updateState,){
-//   String inputValue =  rateController.text;
-//   // Check if the input value is not empty
-// if (inputValue.isNotEmpty) {
-//     // Parse the input value to a double
-//     double inputNumber = double.parse(inputValue);
-//    final lastConvertedCurrency =  inputNumber*selectedratevalue;
 
-//   //  updateState(context, lastConvertedCurrency); // Pass the context and lastConvertedCurrency to updateState
-  
-// }
-// }
 
 
 void openModelBottomSheet(
-  BuildContext context , 
-  String selectedCurrency , double lastConvertedCurrency,
+  BuildContext context , String selectedCurrency ,
    double selectedratevalue,
-  //  Function(BuildContext, double) updateState,
-    ){
+   Function(BuildContext, double) updateState, ) {
     
   final height= MediaQuery.sizeOf(context).height*1;
   TextEditingController rateController = TextEditingController();
-  //  double calculatedValue = 0;
+   double calculatedValue = 0;
   showModalBottomSheet(
     context: context,
     builder: (BuildContext context) {
       return Container(
               width: double.infinity,
-              height: height*0.500,
+              height: height*0.400,
               decoration: BoxDecoration(
                 color: Color(0xff1A1B27),
                 borderRadius: BorderRadius.circular(15)
@@ -275,12 +254,12 @@ void openModelBottomSheet(
                                        style: Theme.of(context).textTheme.bodyMedium, //input text decor
                                       
                                       
-                            // // Calculate and update the value dynamically
-                            // onChanged: (value) {
-                            // if (value.isNotEmpty) {
-                            //   calculatedValue = double.parse(value) * selectedratevalue;
-                            //   updateState(context, calculatedValue); // Pass the context and calculatedValue to updateState
-                            // }},
+                            // Calculate and update the value dynamically
+                            onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              calculatedValue = double.parse(value) * selectedratevalue;
+                              updateState(context, calculatedValue); // Pass the context and calculatedValue to updateState
+                            }},
                           
                                        decoration: InputDecoration(
                                          border: OutlineInputBorder(
@@ -322,29 +301,11 @@ void openModelBottomSheet(
                                  //!ST FIELD
                      Text(selectedCurrency.toString(), style: Theme.of(context).textTheme.bodyMedium,),
                        //show the selected currency rate
-
-                //Button
-                SizedBox(
-                  height: height*0.03, width: height*0.3,
-                  child: ElevatedButton(
-                    onPressed: (){
-                  //    //pass the converted currency func
-                  
-                  //  convertedCurrnecy(
-                  //   rateController, selectedratevalue, updateState, context);
-                   
-
-                    }, 
-                    child: const Text('Calculate')
-                    ),
-                ),
                              //
                            
-                    Text(selectedratevalue.toString(),
-                     style: Theme.of(context).textTheme.bodyMedium,),
+                    Text(selectedratevalue.toString(), style: Theme.of(context).textTheme.bodyMedium,),
                        //show the selected currency name
-
-                
+                              
                       
                                  
                     ],
@@ -353,16 +314,9 @@ void openModelBottomSheet(
                ),
              ),
               //
-      //when the button pressed show the lastConvertedCurreny else show nothing
-            //  Text(lastConvertedCurrency.toString()),
-
                 ],
               )
             );
     },
-    
   );
- 
-   }
-
- 
+}
