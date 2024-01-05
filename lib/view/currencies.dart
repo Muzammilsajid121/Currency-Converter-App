@@ -5,21 +5,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 
-class AllCurrencyScreen2 extends StatefulWidget {
-  const AllCurrencyScreen2({super.key});
+class AllCurrencyScreen9 extends StatefulWidget {
+  const AllCurrencyScreen9({super.key});
 
   @override
-  State<AllCurrencyScreen2> createState() => _AllCurrencyScreenState();
+  State<AllCurrencyScreen9> createState() => _AllCurrencyScreenState();
 }
 
-class _AllCurrencyScreenState extends State<AllCurrencyScreen2> {
+class _AllCurrencyScreenState extends State<AllCurrencyScreen9> {
   //
   CurrencyApiServices currencyApiServices = CurrencyApiServices();
   TextEditingController searchController = TextEditingController();
+    TextEditingController rateController = TextEditingController();
 
-  //
-  
-  //
+ double finalCalculatedrates =0.0;
+ String selectedCurrency = ''; 
+  double selectedratevalue = 0.0;
+  // double finalCalculatedRates = 0;
+  var reuslt= '';
+
+
   
 String _formatApiDate(String apiDate) {
   try {
@@ -106,8 +111,6 @@ String _formatApiDate(String apiDate) {
             ),
         
         
-                 //
-        
                      Expanded(
                   child: ListView.builder(
                   itemCount: currencies.length,
@@ -125,10 +128,160 @@ String _formatApiDate(String apiDate) {
                       
                InkWell(
                 onTap: () {
-                  openModelBottomSheet(
-                    context,    currencyKey,   rateValue, 
-                     (BuildContext context, double calculatedValue) { },
-      ); //context for modal bottom sheet and currencykey to show value on second row
+                  String currencyKey = currencies[index];
+                  double rateValue = rates.toJson()[currencyKey];
+
+  
+    selectedCurrency = currencyKey;
+    selectedratevalue = rateValue;
+  
+                  //ModalBottomSheet
+                  showModalBottomSheet(
+                    
+                    context: context,
+                   builder:(BuildContext context){
+                   
+                    //
+                    ////
+                     return Container(
+              width: double.infinity,
+              height: height*0.500,
+              decoration: BoxDecoration(
+                color: Color(0xff1A1B27),
+                borderRadius: BorderRadius.circular(15)
+              ),
+             
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+            Image.asset('assets/coincon.png'),
+             //
+             Padding(
+               padding: const EdgeInsets.all(20.0),
+               child: Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xff212436),
+                  borderRadius: BorderRadius.circular(16)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                                 //!ST FIELD
+                       SizedBox(
+                        width: 120,
+                         child: TextFormField(
+                                       controller: rateController,
+                                       keyboardType: TextInputType.number,
+                                       style: Theme.of(context).textTheme.bodyMedium, //input text decor
+                                
+                          
+                                       decoration: InputDecoration(
+                                         border: OutlineInputBorder(
+                                           borderRadius: BorderRadius.circular(30)
+                                         ),
+                                         
+                                         fillColor: const Color(0xff212436),
+                                         hintText: "Converter",
+                                         hintStyle: Theme.of(context).textTheme.bodyMedium
+                                         
+                                       ),
+                                     ),
+                       ),
+                             //
+                                 Text('USD', style: Theme.of(context).textTheme.bodyMedium,),
+                                 
+                    ],
+                   ),
+                ),
+               ),
+             ),
+
+               //2nd ROW 
+               ////
+                Padding(
+               padding: const EdgeInsets.all(20.0),
+               child: Container(
+                width: double.infinity,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Color(0xff212436),
+                  borderRadius: BorderRadius.circular(16)
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                                 //1ST FIELD
+                     Text(selectedCurrency.toString(), style: Theme.of(context).textTheme.bodyMedium,),
+                       //show the selected currency rate
+                             //
+                           
+                    Text(selectedratevalue.toString(), style: Theme.of(context).textTheme.bodyMedium,),
+                       //show the selected currency name
+
+                            
+                    ],
+                   ),
+                ),
+               ),
+             ),
+              //
+              //Button
+               SizedBox(
+                  height: height*0.04, width: height*0.3,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      // backgroundColor: Color.fromARGB(0, 255, 169, 244),
+                      foregroundColor: Colors.white,
+                      backgroundColor:const Color(0xff212436),                      
+                    ),
+                    onPressed: (){
+                        //Calculations
+  var lastrate = rateController.text;
+  //parsing last rate to double becuz selectedratevalue is also double
+  if(lastrate!= ''){
+     double doublesuperrate = double.parse(lastrate);
+
+     finalCalculatedrates = doublesuperrate*selectedratevalue;
+  if (kDebugMode) {
+    print(finalCalculatedrates);
+  }  
+  
+    setState(() {
+                 finalCalculatedrates;
+                  });  }
+  } ,
+                    child: 
+                   const   Text('Calculate')
+                    ),
+                ),
+
+  // Text(rateController.text +' USD to '+selectedCurrency.toString()+' is '+finalCalculatedrates.toString()),
+  //OR
+Text(finalCalculatedrates != 0.0 ? '${rateController.text} USD to $selectedCurrency is $finalCalculatedrates' : ''),
+    ],
+              ),
+              
+            );
+                   }
+                   //bottom sheet bracket
+                  ).whenComplete(() {
+                    // Reset variables when the modal sheet is closed
+      setState(() {
+        rateController.text = ''; // Clear the text field
+        finalCalculatedrates = 0.0; // Reset the calculation
+        
+        // selectedCurrency = ''; // Reset selected currency
+        // selectedratevalue = 0.0; // Reset selected rate value
+                  });
+                   });
+      
                 },
 
                    child: ListTile(
@@ -201,122 +354,4 @@ String _formatApiDate(String apiDate) {
       ),
     );
   }
-}
-
-
-
-
-void openModelBottomSheet(
-  BuildContext context , String selectedCurrency ,
-   double selectedratevalue,
-   Function(BuildContext, double) updateState, ) {
-    
-  final height= MediaQuery.sizeOf(context).height*1;
-  TextEditingController rateController = TextEditingController();
-   double calculatedValue = 0;
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return Container(
-              width: double.infinity,
-              height: height*0.400,
-              decoration: BoxDecoration(
-                color: Color(0xff1A1B27),
-                borderRadius: BorderRadius.circular(15)
-              ),
-             
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-            Image.asset('assets/coincon.png'),
-             //
-             Padding(
-               padding: const EdgeInsets.all(20.0),
-               child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Color(0xff212436),
-                  borderRadius: BorderRadius.circular(16)
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                                 //!ST FIELD
-                       SizedBox(
-                        width: 120,
-                         child: TextFormField(
-                                       controller: rateController,
-                                       keyboardType: TextInputType.number,
-                                       style: Theme.of(context).textTheme.bodyMedium, //input text decor
-                                      
-                                      
-                            // Calculate and update the value dynamically
-                            onChanged: (value) {
-                            if (value.isNotEmpty) {
-                              calculatedValue = double.parse(value) * selectedratevalue;
-                              updateState(context, calculatedValue); // Pass the context and calculatedValue to updateState
-                            }},
-                          
-                                       decoration: InputDecoration(
-                                         border: OutlineInputBorder(
-                                           borderRadius: BorderRadius.circular(30)
-                                         ),
-                                         
-                                         fillColor: const Color(0xff212436),
-                                         hintText: "Converter",
-                                         hintStyle: Theme.of(context).textTheme.bodyMedium
-                                         
-                                       ),
-                                     ),
-                       ),
-                             //
-                                 Text('USD', style: Theme.of(context).textTheme.bodyMedium,),
-                                 
-                    ],
-                   ),
-                ),
-               ),
-             ),
-
-               //2nd ROW 
-               ////
-                Padding(
-               padding: const EdgeInsets.all(20.0),
-               child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Color(0xff212436),
-                  borderRadius: BorderRadius.circular(16)
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                                 //!ST FIELD
-                     Text(selectedCurrency.toString(), style: Theme.of(context).textTheme.bodyMedium,),
-                       //show the selected currency rate
-                             //
-                           
-                    Text(selectedratevalue.toString(), style: Theme.of(context).textTheme.bodyMedium,),
-                       //show the selected currency name
-                              
-                      
-                                 
-                    ],
-                   ),
-                ),
-               ),
-             ),
-              //
-                ],
-              )
-            );
-    },
-  );
 }

@@ -227,7 +227,8 @@ void openModelBottomSheet(
   //  double calculatedValue = 0;
   showModalBottomSheet(
     context: context,
-    builder: (BuildContext context) {
+    builder: (BuildContext context)
+     {
       return Container(
               width: double.infinity,
               height: height*0.500,
