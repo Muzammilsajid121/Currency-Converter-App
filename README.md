@@ -1,16 +1,8 @@
 # currency_converter
 
-A new Flutter project.
+Currency Converter App In flutter.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This Currency Converter app is developed on flutter. It shows the rates of all currencies and have ability to convert USD to any currency.
+Also this app has a searched bar so you can get your desired currency rates fastly.
