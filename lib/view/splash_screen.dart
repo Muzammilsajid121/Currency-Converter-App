@@ -1,4 +1,4 @@
-import 'package:currency_converter/view/all_currencies_screen.dart';
+import 'package:currency_converter/view/currencies.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
@@ -30,7 +30,7 @@ void dispose() {
   //splash
  void switchToWorldScreen() {
     Navigator.pushReplacement(   
-        context, MaterialPageRoute(builder: (context) =>const  AllCurrencyScreen()));
+        context, MaterialPageRoute(builder: (context) =>const  AllCurrencyScreen9()));
   }
   @override
   void initState() {
