@@ -1,6 +1,7 @@
-# Currency Converter App
+# Currency Converter App       <img src="projectphotos/logo.png" alt="Currency Converter App Logo" width="40" height="40">
 
-![Currency Converter App Logo](link/to/logo.png)
+
+
 
 ## Overview
 
@@ -16,7 +17,15 @@ Welcome to the Currency Converter App, a powerful tool designed to simplify curr
 ## Screenshots
 
 ![Screenshot 1](projectphotos/allcurrency.png)
+
 ![Screenshot 2](projectphotos/conver.png)
+
+![Screenshot 1](projectphotos/conversion.png)
+
+![Screenshot 2](projectphotos/modalsheet.png)
+
+![Screenshot 2](projectphotos/searched.png)
+
 
 ## How to Use
 
