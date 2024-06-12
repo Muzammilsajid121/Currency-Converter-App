@@ -84,17 +84,20 @@ var reuslt= '';
         child: Column(
           children: [
             Container(
+              width: 300,
               decoration: const BoxDecoration(
-                color: Color(0xff2F2F34),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                color: Color.fromARGB(255, 97, 97, 97),
+                borderRadius: BorderRadius.all(Radius.circular(9)),
               ),
-              child: Text(
-                //functions.becuz values is gained from Function class object
-                functions.formatApiDate(snapshot.data!.timeLastUpdateUtc ?? 'N/A'),
-                style: Theme.of(context).textTheme.bodyMedium,
+              child: Center(
+                child: Text(
+                  //functions.becuz values is gained from Function class object
+                  functions.formatApiDate(snapshot.data!.timeLastUpdateUtc ?? 'N/A'),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             ),
-        
+        const SizedBox(height: 12,),
         
                      Expanded(
                   child: ListView.builder(
@@ -123,6 +126,7 @@ var reuslt= '';
                   //ModalBottomSheet
                   showModalBottomSheet(
                    context: context,
+                   isScrollControlled: true, //it will adjust height of your given 
                    builder:(BuildContext context){
    //  StatefulBuilder to update bottomsheet state
                      return StatefulBuilder(
@@ -130,7 +134,7 @@ var reuslt= '';
                        return Container(
                                     
                                      width: double.infinity,
-                                     height: height*0.500,
+                                     height: height*0.800,
                                      decoration:const  BoxDecoration(
                                        color:   Color.fromARGB(255, 85, 87, 116),
                                           borderRadius: BorderRadius.only(
@@ -161,7 +165,7 @@ var reuslt= '';
                                            children: [
                                    //!ST FIELD
                      SizedBox(
-                          width: width*0.22,
+                          width: 130,
                           height: height*0.15,
                            child: TextFormField(
                                          controller: rateController,
@@ -176,7 +180,7 @@ var reuslt= '';
                                            ),
                                            
                                            fillColor: const Color(0xff212436),
-                                           hintText: "Converter",
+                                           hintText: "Convert",
                                            hintStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(fontSize: 14)
                                            
                                          ),
@@ -252,7 +256,7 @@ var reuslt= '';
                                            ),
                                        ),
 
-SizedBox(height: height*0.01,)  ,      
+const SizedBox(height: 150)  ,      
 // Text(rateController.text +' USD to '+selectedCurrency.toString()+' is '+finalCalculatedrates.toString()),
  //OR
 Text(finalCalculatedrates != 0.0 ? '${rateController.text} USD to $selectedCurrency is ${finalCalculatedrates.toInt()}' : ''),
@@ -315,7 +319,8 @@ Text(finalCalculatedrates != 0.0 ? '${rateController.text} USD to $selectedCurre
   
                   //ModalBottomSheet
                   showModalBottomSheet(
-                   context: context,
+                  context: context,
+                   isScrollControlled: true, //it will adjust height of your given 
                    builder:(BuildContext context){
    //  StatefulBuilder to update bottomsheet state
                      return StatefulBuilder(
@@ -323,7 +328,7 @@ Text(finalCalculatedrates != 0.0 ? '${rateController.text} USD to $selectedCurre
                        return Container(
                                     
                                      width: double.infinity,
-                                     height: height*0.500,
+                                     height: height*0.800,
                                      decoration:const  BoxDecoration(
                                        color:   Color.fromARGB(255, 85, 87, 116),
                                           borderRadius: BorderRadius.only(
@@ -354,7 +359,7 @@ Text(finalCalculatedrates != 0.0 ? '${rateController.text} USD to $selectedCurre
                                            children: [
                                    //!ST FIELD
                          SizedBox(
-                          width: width*0.22,
+                          width: 130,
                           height: height*0.15,
                            child: TextFormField(
                                          controller: rateController,
@@ -489,7 +494,7 @@ Text(finalCalculatedrates != 0.0 ? '${rateController.text} USD to $selectedCurre
                     }
                     //
                     else{
-                      return Container();
+                      return const  SizedBox();
                     }
                  
                   }),
