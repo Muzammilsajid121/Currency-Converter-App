@@ -14,7 +14,7 @@ class SplashScreen extends StatefulWidget {
 class SplashScreenState extends State<SplashScreen> with TickerProviderStateMixin{
 //ANIMATINON CODE
   late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 4),
+    duration: const Duration(seconds: 2),
     vsync: this)..repeat();
 
     //need to dispose this
