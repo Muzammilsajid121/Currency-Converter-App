@@ -1,0 +1,4 @@
+storePassword=currency@converter@920
+keyPassword=currency@converter@920
+keyAlias=upload
+storeFile=C:/signedaabs/currencyconverterconsole.jks
